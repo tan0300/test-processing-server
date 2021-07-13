@@ -87,9 +87,8 @@ function sendEmail() {
     })();
   }
 }
-
 var schedule = require('node-schedule');
-var j = schedule.scheduleJob('0 */12 * * *', function(){
+var j = schedule.scheduleJob('0 */7 * * *', function(){
   sendRequest();
 });
 
