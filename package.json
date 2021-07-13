@@ -1,0 +1,28 @@
+{
+  "name": "processing-server-checker",
+  "version": "1.0.0",
+  "description": "Checks the status of processing server",
+  "main": "index.js",
+  "dependencies": {
+    "dotenv": "^10.0.0",
+    "fs": "^0.0.1-security",
+    "http": "^0.0.1-security",
+    "node-schedule": "^2.0.0",
+    "request": "^2.88.2",
+    "twilio": "^3.65.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tan0300/test-processing-server.git"
+  },
+  "author": "Jonatahn Espanol",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tan0300/test-processing-server/issues"
+  },
+  "homepage": "https://github.com/tan0300/test-processing-server#readme"
+}
