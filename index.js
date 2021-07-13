@@ -1,32 +1,37 @@
-var request = require('request');
 require('dotenv').config();
-var fs = require('fs');
+const request = require('request');
+const fs = require('fs');
 const sgMail = require('@sendgrid/mail');
-
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
-
 const client = require('twilio')(accountSid, authToken);
 
-let url = "http://ec2-3-17-181-179.us-easst-2.compute.amazonaws.com/media/process";
 
-let formData = {
-  
-  fileName: 'test.mp4',
-  callbackData: JSON.stringify({delayResponse : true}),
-  file: fs.createReadStream(__dirname + "/test.mp4")
+function sendRequest() {
+  let dateToday = new Date(); //this will be used to logging dat
+  let formData = {
+    
+    fileName: 'test.mp4',
+    callbackData: JSON.stringify({delayResponse : true}),
+    file: fs.createReadStream(__dirname + "/test.mp4")
+  }
+
+  var req = request.post({url: process.env.PROCESSING_SERVER_URL, formData}, function (err, resp, body) {
+    if (err) {
+      console.log(err)
+      fs.appendFile(__dirname+'/logs/error-log-'+ dateToday.toLocaleDateString('en-CA')+'.txt', `[${dateToday}] Processing server is down \r\n`, function (err) {
+        if (err) return console.log(err);
+      });
+      sendText();
+      sendEmail();
+    } else {
+      fs.appendFile(__dirname+'/logs/success-log-'+ dateToday.toLocaleDateString('en-CA')+'.txt', `[${dateToday}] Success Upload \r\n`, function (err) {
+        if (err) return console.log(err);
+      });
+    }
+  });
 }
 
-var req = request.post({url: url, formData}, function (err, resp, body) {
-  if (err) {
-    console.log(err)
-    console.log('Error!');
-    sendText();
-    sendEmail();
-  } else {
-    console.log('good');
-  }
-});
 
 function sendText()
 { 
@@ -82,3 +87,9 @@ function sendEmail() {
     })();
   }
 }
+sendRequest();
+var schedule = require('node-schedule');
+var j = schedule.scheduleJob('0 */12 * * *', function(){
+ 
+});
+
